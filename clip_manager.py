@@ -150,7 +150,7 @@ class ClipEntry:
 
         if target_alpha_dir:
             if not os.listdir(target_alpha_dir):
-                logging.warning(f"Clip '{self.name}': AlphaHint directory exists but is empty. Marking for generation.")
+                logger.warning(f"Clip '{self.name}': AlphaHint directory exists but is empty. Marking for generation.")
                 self.alpha_asset = None
             else:
                 # Check for image sequence first
@@ -161,7 +161,7 @@ class ClipEntry:
                     if video_candidates:
                         self.alpha_asset = ClipAsset(os.path.join(target_alpha_dir, video_candidates[0]), "video")
                     else:
-                        logging.warning(
+                        logger.warning(
                             f"Clip '{self.name}': AlphaHint directory has no valid image or video files."
                             " Marking for generation."
                         )
@@ -958,14 +958,11 @@ def scan_clips() -> list[ClipEntry]:
             invalid_clips.append((d, f"Unexpected error: {e}"))
 
     if invalid_clips:
-        print("\n" + "=" * 60)
-        print(" INVALID OR SKIPPED CLIPS")
-        print("=" * 60)
+        logger.warning("INVALID OR SKIPPED CLIPS:")
         for name, reason in invalid_clips:
-            print(f"- {name}: {reason}")
-        print("=" * 60 + "\n")
+            logger.warning("  - %s: %s", name, reason)
     else:
-        print("\nAll clip folders appear valid.\n")
+        logger.info("All clip folders appear valid.")
 
     return valid_clips
 
