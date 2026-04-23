@@ -84,7 +84,7 @@ class BiRefNetHandler:
 
         self.birefnet.to(device)
         self.birefnet.eval()
-        if half_precision:
+        if device != "cpu":
             self.birefnet.half()
 
     def cleanup(self):
