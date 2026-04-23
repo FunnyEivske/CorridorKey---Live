@@ -7,6 +7,9 @@ echo     CorridorKey Live Studio - Starter
 echo ===================================================
 echo.
 
+:: Sørg for at uv kan bli funnet
+set "PATH=%USERPROFILE%\.local\bin;%PATH%"
+
 :: Sjekker om uv er installert
 where uv >nul 2>&1
 if %errorlevel% neq 0 (

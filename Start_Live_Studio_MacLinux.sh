@@ -4,6 +4,9 @@ echo "    CorridorKey Live Studio - Starter"
 echo "==================================================="
 echo ""
 
+# Sørg for at uv kan bli funnet selv om det nettopp er installert
+export PATH="$HOME/.local/bin:$PATH"
+
 prompt_install() {
     echo "[Advarsel] Det ser ut til at nødvendige verktøy, pakker eller AI-modeller mangler."
     echo "Dette kan være uv (pakkebehandler), biblioteker eller CorridorKey-modellen."
