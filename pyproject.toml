@@ -126,7 +126,7 @@ conflicts = [
 
 [[tool.uv.index]]
 name = "pytorch"
-url = "https://download.pytorch.org/whl/cu124" # Changed from cu128 to cu124 for better driver compatibility
+url = "https://download.pytorch.org/whl/cu128" # CUDA 12.6 doesn't support RTX 5000 Series
 explicit = true
 extra = "cuda"
 
