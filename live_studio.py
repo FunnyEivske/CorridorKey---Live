@@ -4,7 +4,13 @@ import numpy as np
 import torch
 from PIL import Image
 from torchvision import transforms
-import NDIlib as ndi
+try:
+    import NDIlib as ndi
+    NDI_AVAILABLE = True
+except ImportError:
+    ndi = None
+    NDI_AVAILABLE = False
+    
 import subprocess
 import gc
 import sys
@@ -52,8 +58,11 @@ class StudioLauncher:
         self.ck_res.set("1024")
         self.ck_res.pack()
         
-        self.ndi_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(self.root, text="Enable NDI Stream", variable=self.ndi_var).pack(pady=20)
+        self.ndi_var = tk.BooleanVar(value=NDI_AVAILABLE)
+        cb = ttk.Checkbutton(self.root, text="Enable NDI Stream", variable=self.ndi_var)
+        cb.pack(pady=20)
+        if not NDI_AVAILABLE:
+            cb.config(state="disabled", text="NDI Not Installed (Disabled)")
         
         # Start button
         style = ttk.Style()

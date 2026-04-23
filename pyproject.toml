@@ -45,8 +45,7 @@ dependencies = [
 
 [project.optional-dependencies]
 live = [
-    "opencv-python",
-    "ndi-python",
+    "opencv-python>=4.8",
 ]
 cuda = [
     "torch==2.8.0",
