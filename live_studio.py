@@ -16,6 +16,18 @@ import gc
 import sys
 import tkinter as tk
 from tkinter import ttk
+import logging
+import traceback
+
+# Sett opp logging til fil
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    handlers=[
+        logging.FileHandler("studio_log.txt", encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 
 # CorridorKey and BiRefNet imports
 from CorridorKeyModule.inference_engine import CorridorKeyEngine
@@ -101,13 +113,13 @@ def get_gpu_temperature_and_load():
 def create_ndi_sender(name="CorridorKey Live"):
     """Create NDI Video Sender."""
     if not ndi.initialize():
-        print("Cannot run NDI.")
+        logging.error("Cannot run NDI.")
         return None
     ndi_send_create_desc = ndi.SendCreate()
     ndi_send_create_desc.ndi_name = name
     ndi_send = ndi.send_create(ndi_send_create_desc)
     if ndi_send is None:
-        print("Error creating NDI sender")
+        logging.error("Error creating NDI sender")
         return None
     return ndi_send
 
@@ -138,12 +150,12 @@ def main():
     launcher.root.mainloop()
     
     if not launcher.settings:
-        print("Setup cancelled. Exiting.")
+        logging.info("Setup cancelled. Exiting.")
         return
         
     cfg = launcher.settings
 
-    print("Initialize CorridorKey Live Studio...")
+    logging.info("Initialize CorridorKey Live Studio...")
     if torch.cuda.is_available():
         device = "cuda"
     elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
@@ -154,7 +166,7 @@ def main():
     half_precision = True if device != "cpu" else False
     
     # 2. Model Loader
-    print(f"Loading Models onto {device} in FP16...")
+    logging.info(f"Loading Models onto {device} in FP16...")
     
     # BiRefNet setup
     birefnet_handler = BiRefNetHandler(device=device, usage=cfg["BIREFNET_MODEL"])
@@ -170,7 +182,7 @@ def main():
         mixed_precision=half_precision if device == "cuda" else False,
     )
     
-    print("Models Loaded.")
+    logging.info("Models Loaded.")
     
     # NDI Integration
     ndi_sender = create_ndi_sender("CorridorKey Live") if cfg["NDI_ENABLED"] else None
@@ -183,7 +195,7 @@ def main():
     
     cap_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     cap_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    print(f"Capture started at {cap_width}x{cap_height}")
+    logging.info(f"Capture started at {cap_width}x{cap_height}")
     
     # 3. Setup OpenCV Window and Live Controls
     cv2.namedWindow("CorridorKey Live Studio", cv2.WINDOW_NORMAL)
@@ -195,7 +207,7 @@ def main():
     frame_count = 0
     last_vram_clear = time.time()
     
-    print("Starting Main Loop... Press 'q' to quit.")
+    logging.info("Starting Main Loop... Press 'q' to quit.")
     
     while cap.isOpened():
         start_time = time.time()
@@ -203,7 +215,7 @@ def main():
         # GPU Monitoring & Skipping logic
         temp, load = get_gpu_temperature_and_load()
         if temp > 85 or load > 95:
-            print(f"WARNING: GPU too hot ({temp}C) or overloaded ({load}%). Skipping frame.")
+            logging.warning(f"WARNING: GPU too hot ({temp}C) or overloaded ({load}%). Skipping frame.")
             # Clear buffer slightly
             cap.read() 
             time.sleep(0.05)
@@ -211,7 +223,7 @@ def main():
             
         ret, frame = cap.read()
         if not ret:
-            print("Failed to grab frame.")
+            logging.error("Failed to grab frame.")
             break
             
         # Get live slider values
@@ -315,4 +327,10 @@ def main():
         ndi.destroy()
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        logging.error("Programmet krasjet med en uventet feil:")
+        logging.error(traceback.format_exc())
+        print("Sjekk studio_log.txt for detaljer om feilen.")
+        sys.exit(1)
