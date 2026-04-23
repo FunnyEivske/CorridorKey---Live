@@ -71,14 +71,16 @@ set "HF_BASE=https://huggingface.co/nikopueringer/CorridorKey_v1.0/resolve/main"
 
 if exist "%SAFETENSORS_PATH%" (
     echo CorridorKey modell safetensors funnet.
-) else if exist "%PTH_PATH%" (
-    echo CorridorKey modell pth funnet.
 ) else (
-    echo [INFO] Laster ned CorridorKey modell (dette kan ta litt tid)...
-    curl.exe -L --fail -o "%SAFETENSORS_PATH%" "%HF_BASE%/CorridorKey_v1.0.safetensors"
-    if errorlevel 1 (
-        if exist "%SAFETENSORS_PATH%" del "%SAFETENSORS_PATH%"
-        curl.exe -L -o "%PTH_PATH%" "%HF_BASE%/CorridorKey_v1.0.pth"
+    if exist "%PTH_PATH%" (
+        echo CorridorKey modell pth funnet.
+    ) else (
+        echo [INFO] Laster ned CorridorKey modell ^(dette kan ta litt tid^)...
+        curl.exe -L --fail -o "%SAFETENSORS_PATH%" "%HF_BASE%/CorridorKey_v1.0.safetensors"
+        if errorlevel 1 (
+            if exist "%SAFETENSORS_PATH%" del "%SAFETENSORS_PATH%"
+            curl.exe -L -o "%PTH_PATH%" "%HF_BASE%/CorridorKey_v1.0.pth"
+        )
     )
 )
 
