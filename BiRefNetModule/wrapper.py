@@ -86,6 +86,8 @@ class BiRefNetHandler:
         self.birefnet.eval()
         if device != "cpu":
             self.birefnet.half()
+        else:
+            self.birefnet.float()
 
     def cleanup(self):
         """Explicitly clear model and release GPU memory."""
