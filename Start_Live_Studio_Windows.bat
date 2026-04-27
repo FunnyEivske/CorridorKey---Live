@@ -26,6 +26,22 @@ if not exist "CorridorKeyModule\checkpoints\CorridorKey_v1.0.pth" if not exist "
     goto :prompt_install
 )
 
+:: Sjekker om NDI Runtime er installert
+if not exist "%SystemRoot%\System32\Processing.NDI.Lib.x64.dll" (
+    echo [INFO] NDI Runtime mangler. Dette trengs for å sende video til OBS.
+    goto :prompt_install
+)
+
+:: Sjekker om CUDA er tilgjengelig (hvis NVIDIA GPU finnes)
+where nvidia-smi >nul 2>&1
+if %errorlevel% equ 0 (
+    uv run python -c "import torch; exit(0 if torch.cuda.is_available() else 1)" >nul 2>&1
+    if %errorlevel% neq 0 (
+        echo [INFO] NVIDIA GPU funnet, men CUDA er ikke aktiv i miljøet. Reparerer...
+        goto :prompt_install
+    )
+)
+
 :: Alt ser bra ut, start programmet
 goto :start_program
 
@@ -85,6 +101,22 @@ if exist "%SAFETENSORS_PATH%" (
 )
 
 echo.
+echo [INFO] Sjekker NDI Runtime...
+if not exist "%SystemRoot%\System32\Processing.NDI.Lib.x64.dll" (
+    echo NDI Runtime mangler. Dette er nødvendig for OBS-støtte.
+    set /p DO_NDI="Vil du laste ned og installere NDI Runtime nå? (J/N): "
+    if /i "%DO_NDI%"=="J" (
+        echo Laster ned NDI Runtime...
+        curl.exe -L --fail -o "NDI_Runtime_Installer.exe" "http://ndi.link/NDIRedistV6"
+        if exist "NDI_Runtime_Installer.exe" (
+            echo Starter installasjon... Vennligst følg instruksjonene på skjermen.
+            start /wait NDI_Runtime_Installer.exe
+            del NDI_Runtime_Installer.exe
+        )
+    )
+)
+
+echo.
 echo [INFO] Oppsett fullført!
 echo.
 goto :start_program
@@ -101,7 +133,7 @@ exit /b
 echo ===================================================
 echo     Starter Live Studio...
 echo ===================================================
-uv run live_studio.py
+uv run --extra live --extra cuda live_studio.py
 if %errorlevel% neq 0 (
     echo.
     echo [FEIL] Programmet avsluttet med en feil.
