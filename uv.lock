@@ -407,7 +407,7 @@ requires-dist = [
     { name = "rich", specifier = ">=13" },
     { name = "safetensors" },
     { name = "setuptools" },
-    { name = "timm", git = "https://github.com/Raiden129/pytorch-image-models-fix?branch=fix%2Fhiera-flash-attention-global-4d" },
+    { name = "timm", url = "https://github.com/Raiden129/pytorch-image-models-fix/archive/refs/heads/fix/hiera-flash-attention-global-4d.zip" },
     { name = "torch", specifier = "==2.8.0" },
     { name = "torch", marker = "extra == 'cuda'", specifier = "==2.8.0", index = "https://download.pytorch.org/whl/cu128", conflict = { package = "corridorkey", extra = "cuda" } },
     { name = "torch", marker = "extra == 'rocm'", specifier = "==2.8.0", index = "https://download.pytorch.org/whl/rocm6.3", conflict = { package = "corridorkey", extra = "rocm" } },
@@ -2064,7 +2064,7 @@ wheels = [
 [[package]]
 name = "timm"
 version = "1.0.25"
-source = { git = "https://github.com/Raiden129/pytorch-image-models-fix?branch=fix%2Fhiera-flash-attention-global-4d#fc1dca92c5a44d5436605dacb19594117ce2eb0c" }
+source = { url = "https://github.com/Raiden129/pytorch-image-models-fix/archive/refs/heads/fix/hiera-flash-attention-global-4d.zip" }
 dependencies = [
     { name = "huggingface-hub" },
     { name = "pyyaml" },
@@ -2075,6 +2075,16 @@ dependencies = [
     { name = "torchvision", version = "0.23.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-11-corridorkey-mlx' or (extra == 'extra-11-corridorkey-cuda' and extra == 'extra-11-corridorkey-rocm') or (extra != 'extra-11-corridorkey-cuda' and extra != 'extra-11-corridorkey-rocm')" },
     { name = "torchvision", version = "0.23.0+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "extra == 'extra-11-corridorkey-cuda' or (extra == 'extra-11-corridorkey-mlx' and extra == 'extra-11-corridorkey-rocm')" },
     { name = "torchvision", version = "0.23.0+rocm6.3", source = { registry = "https://download.pytorch.org/whl/rocm6.3" }, marker = "(extra == 'extra-11-corridorkey-cuda' and extra == 'extra-11-corridorkey-mlx') or (extra != 'extra-11-corridorkey-mlx' and extra == 'extra-11-corridorkey-rocm') or (extra != 'extra-11-corridorkey-cuda' and extra == 'extra-11-corridorkey-rocm')" },
+]
+sdist = { hash = "sha256:e7194596298a4bba367ebcc4a5343bc99ac98f5b0946c79f40b8bc34f9c477b5" }
+
+[package.metadata]
+requires-dist = [
+    { name = "huggingface-hub" },
+    { name = "pyyaml" },
+    { name = "safetensors" },
+    { name = "torch" },
+    { name = "torchvision" },
 ]
 
 [[package]]

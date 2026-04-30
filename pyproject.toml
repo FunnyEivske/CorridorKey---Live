@@ -31,8 +31,7 @@ dependencies = [
     "easydict",
     "imageio",
     "matplotlib",
-    # VideoMaMa alpha hint generator
-    "einops",
+    "einops", # Required by BiRefNet HuggingFace remote code
     # BiRefNet alpha hint generator
     "kornia",
     # CLI tools (huggingface-hub is also a transitive dep, but must be direct
@@ -73,12 +72,12 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["CorridorKeyModule", "gvm_core", "VideoMaMaInferenceModule"]
+packages = ["CorridorKeyModule", "gvm_core"]
 
 [tool.ruff]
 target-version = "py311"
 line-length = 120
-extend-exclude = ["gvm_core/", "VideoMaMaInferenceModule/"]
+extend-exclude = ["gvm_core/"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B"]
@@ -103,7 +102,6 @@ branch = true
 source = ["CorridorKeyModule", "."]
 omit = [
     "gvm_core/*",
-    "VideoMaMaInferenceModule/*",
     "tests/*",
     "test_vram.py", # manual GPU smoke test, not part of the pytest suite
 ]
@@ -138,8 +136,7 @@ explicit = true
 extra = "rocm"
 
 [tool.uv.sources]
-# Use Hiera fix in order to utilize the FlashAttention Kernel
-timm = { git = "https://github.com/Raiden129/pytorch-image-models-fix", branch = "fix/hiera-flash-attention-global-4d" }
+timm = { url = "https://github.com/Raiden129/pytorch-image-models-fix/archive/refs/heads/fix/hiera-flash-attention-global-4d.zip" }
 torch = [
     { index = "pytorch", extra = "cuda" },
     { index = "pytorch-rocm", extra = "rocm" },

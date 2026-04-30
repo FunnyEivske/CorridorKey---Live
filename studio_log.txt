@@ -25,3 +25,242 @@
 2026-04-23 11:32:18,450 [INFO] HTTP Request: GET https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet_lite/7838f1c3472f827cd8ce13ab5ccc2ce48077360f/handler.py "HTTP/1.1 200 OK"
 2026-04-23 11:32:18,450 [INFO] HTTP Request: GET https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet_lite/7838f1c3472f827cd8ce13ab5ccc2ce48077360f/requirements.txt "HTTP/1.1 200 OK"
 2026-04-23 11:32:18,473 [INFO] HTTP Request: GET https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet_lite/7838f1c3472f827cd8ce13ab5ccc2ce48077360f/README.md "HTTP/1.1 200 OK"
+2026-04-28 08:05:29,818 [INFO] Initialize CorridorKey Live Studio...
+2026-04-28 08:05:29,818 [INFO] Loading Models onto cuda in FP16...
+2026-04-28 08:05:30,083 [INFO] HTTP Request: GET https://huggingface.co/api/models/ZhengPeng7/BiRefNet_512x512/revision/main "HTTP/1.1 200 OK"
+2026-04-28 08:05:32,002 [INFO] Loading CorridorKey from CorridorKeyModule/checkpoints/CorridorKey.safetensors
+2026-04-28 08:05:32,002 [INFO] Initializing hiera_base_plus_224.mae_in1k_ft_in1k (img_size=1024)
+2026-04-28 08:05:32,762 [INFO] Skipped downloading base weights (relying on custom checkpoint)
+2026-04-28 08:05:32,769 [INFO] Patched input layer: 3 → 4 channels (extra initialized to 0)
+2026-04-28 08:05:32,769 [INFO] Feature channels: [112, 224, 448, 896]
+2026-04-28 08:05:33,670 [INFO] Skipping torch.compile (MSVC (cl.exe) not found. Install Visual Studio Build Tools for ~30% faster inference: https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+2026-04-28 08:05:33,671 [INFO] Models Loaded.
+2026-04-28 08:06:33,912 [INFO] Capture started at 1920x1080
+2026-04-28 08:06:34,003 [INFO] Starting Main Loop... Press 'q' to quit.
+2026-04-28 08:31:20,397 [ERROR] Programmet krasjet med en uventet feil:
+2026-04-28 08:31:20,400 [ERROR] Traceback (most recent call last):
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 474, in <module>
+    main()
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 335, in main
+    despill_val = cv2.getTrackbarPos("Despill (0-100)", "CorridorKey Live Studio") / 100.0
+cv2.error: OpenCV(4.13.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window_w32.cpp:2570: error: (-27:Null pointer) NULL window: 'CorridorKey Live Studio' in function 'cvGetTrackbarPos'
+
+
+2026-04-28 12:22:55,260 [INFO] Initialize CorridorKey Live Studio...
+2026-04-28 12:22:55,287 [INFO] Loading Models onto cuda in FP16...
+2026-04-28 12:22:55,564 [INFO] HTTP Request: GET https://huggingface.co/api/models/ZhengPeng7/BiRefNet_512x512/revision/main "HTTP/1.1 200 OK"
+2026-04-28 12:22:57,467 [INFO] Loading CorridorKey from CorridorKeyModule/checkpoints/CorridorKey.safetensors
+2026-04-28 12:22:57,467 [INFO] Initializing hiera_base_plus_224.mae_in1k_ft_in1k (img_size=1024)
+2026-04-28 12:22:58,336 [INFO] Skipped downloading base weights (relying on custom checkpoint)
+2026-04-28 12:22:58,338 [INFO] Patched input layer: 3 → 4 channels (extra initialized to 0)
+2026-04-28 12:22:58,339 [INFO] Feature channels: [112, 224, 448, 896]
+2026-04-28 12:22:59,401 [INFO] Skipping torch.compile (MSVC (cl.exe) not found. Install Visual Studio Build Tools for ~30% faster inference: https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+2026-04-28 12:22:59,401 [INFO] Models Loaded.
+2026-04-28 12:22:59,955 [INFO] Capture started at 1280x720
+2026-04-28 12:23:00,064 [INFO] Starting Main Loop... Press 'q' to quit.
+2026-04-28 12:24:10,890 [ERROR] Programmet krasjet med en uventet feil:
+2026-04-28 12:24:10,891 [ERROR] Traceback (most recent call last):
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 497, in <module>
+    main()
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 358, in main
+    despill_val = cv2.getTrackbarPos("Despill (0-100)", "CorridorKey Live Studio") / 100.0
+cv2.error: OpenCV(4.13.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window_w32.cpp:2570: error: (-27:Null pointer) NULL window: 'CorridorKey Live Studio' in function 'cvGetTrackbarPos'
+
+
+2026-04-28 12:29:36,432 [INFO] Setup cancelled. Exiting.
+2026-04-28 12:44:29,812 [INFO] Setup cancelled. Exiting.
+2026-04-28 13:03:44,050 [INFO] Initialize CorridorKey Live Studio...
+2026-04-28 13:03:44,052 [INFO] Loading Models onto cuda in FP16...
+2026-04-28 13:03:44,374 [INFO] HTTP Request: GET https://huggingface.co/api/models/ZhengPeng7/BiRefNet_512x512/revision/main "HTTP/1.1 200 OK"
+2026-04-28 13:03:45,493 [ERROR] Programmet krasjet med en uventet feil:
+2026-04-28 13:03:45,496 [ERROR] Traceback (most recent call last):
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 507, in <module>
+    main()
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 310, in main
+    birefnet_handler = BiRefNetHandler(device=device, usage=cfg["BIREFNET_MODEL"])
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\BiRefNetModule\wrapper.py", line 83, in __init__
+    self.birefnet = AutoModelForImageSegmentation.from_pretrained(model_local_dir, trust_remote_code=True)
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\.venv\lib\site-packages\transformers\models\auto\auto_factory.py", line 369, in from_pretrained
+    model_class = get_class_from_dynamic_module(
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\.venv\lib\site-packages\transformers\dynamic_module_utils.py", line 572, in get_class_from_dynamic_module
+    final_module = get_cached_module_file(
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\.venv\lib\site-packages\transformers\dynamic_module_utils.py", line 410, in get_cached_module_file
+    modules_needed = check_imports(resolved_module_file)
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\.venv\lib\site-packages\transformers\dynamic_module_utils.py", line 258, in check_imports
+    raise ImportError(
+ImportError: This modeling file requires the following packages that were not found in your environment: einops. Run `pip install einops`
+
+2026-04-28 13:07:47,184 [INFO] Initialize CorridorKey Live Studio...
+2026-04-28 13:07:47,185 [INFO] Loading Models onto cuda in FP16...
+2026-04-28 13:07:47,582 [INFO] HTTP Request: GET https://huggingface.co/api/models/ZhengPeng7/BiRefNet_512x512/revision/main "HTTP/1.1 200 OK"
+2026-04-28 13:07:50,892 [INFO] Loading CorridorKey from CorridorKeyModule/checkpoints/CorridorKey.safetensors
+2026-04-28 13:07:50,893 [INFO] Initializing hiera_base_plus_224.mae_in1k_ft_in1k (img_size=1024)
+2026-04-28 13:07:52,477 [INFO] Skipped downloading base weights (relying on custom checkpoint)
+2026-04-28 13:07:52,481 [INFO] Patched input layer: 3 → 4 channels (extra initialized to 0)
+2026-04-28 13:07:52,482 [INFO] Feature channels: [112, 224, 448, 896]
+2026-04-28 13:07:53,995 [INFO] Skipping torch.compile (MSVC (cl.exe) not found. Install Visual Studio Build Tools for ~30% faster inference: https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+2026-04-28 13:07:53,996 [INFO] Models Loaded.
+2026-04-28 13:07:57,781 [INFO] Capture started at 1280x720
+2026-04-28 13:07:57,938 [INFO] Starting Main Loop...
+2026-04-28 13:07:57,944 [INFO] Press 'V' to toggle view mode (Grid vs Output).
+2026-04-28 13:07:57,948 [INFO] Press 'Q' to quit.
+2026-04-28 13:08:46,421 [ERROR] Programmet krasjet med en uventet feil:
+2026-04-28 13:08:46,423 [ERROR] Traceback (most recent call last):
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 507, in <module>
+    main()
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 373, in main
+    despill_val = cv2.getTrackbarPos("4. Remove Green", window_name) / 100.0
+cv2.error: OpenCV(4.13.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window_w32.cpp:2570: error: (-27:Null pointer) NULL window: 'CorridorKey Live Studio v1.2.0' in function 'cvGetTrackbarPos'
+
+
+2026-04-28 14:32:36,096 [INFO] Initialize CorridorKey Live Studio...
+2026-04-28 14:32:36,096 [INFO] Loading Models onto cuda in FP16...
+2026-04-28 14:32:36,283 [INFO] HTTP Request: GET https://huggingface.co/api/models/ZhengPeng7/BiRefNet_512x512/revision/main "HTTP/1.1 200 OK"
+2026-04-28 14:32:38,115 [INFO] Loading CorridorKey from CorridorKeyModule/checkpoints/CorridorKey.safetensors
+2026-04-28 14:32:38,115 [INFO] Initializing hiera_base_plus_224.mae_in1k_ft_in1k (img_size=1024)
+2026-04-28 14:32:38,666 [INFO] Skipped downloading base weights (relying on custom checkpoint)
+2026-04-28 14:32:38,668 [INFO] Patched input layer: 3 → 4 channels (extra initialized to 0)
+2026-04-28 14:32:38,668 [INFO] Feature channels: [112, 224, 448, 896]
+2026-04-28 14:32:39,462 [INFO] Skipping torch.compile (MSVC (cl.exe) not found. Install Visual Studio Build Tools for ~30% faster inference: https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+2026-04-28 14:32:39,462 [INFO] Models Loaded.
+2026-04-28 14:32:41,426 [INFO] Capture started at 1280x720
+2026-04-28 14:32:41,484 [INFO] Starting Main Loop...
+2026-04-28 14:32:41,484 [INFO] Press 'V' to toggle view mode (Grid vs Output).
+2026-04-28 14:32:41,484 [INFO] Press 'Q' to quit.
+2026-04-28 14:33:32,967 [INFO] Initialize CorridorKey Live Studio...
+2026-04-28 14:33:32,967 [INFO] Loading Models onto cuda in FP16...
+2026-04-28 14:33:33,197 [INFO] HTTP Request: GET https://huggingface.co/api/models/ZhengPeng7/BiRefNet_512x512/revision/main "HTTP/1.1 200 OK"
+2026-04-28 14:33:34,922 [INFO] Loading CorridorKey from CorridorKeyModule/checkpoints/CorridorKey.safetensors
+2026-04-28 14:33:34,923 [INFO] Initializing hiera_base_plus_224.mae_in1k_ft_in1k (img_size=512)
+2026-04-28 14:33:35,431 [INFO] Skipped downloading base weights (relying on custom checkpoint)
+2026-04-28 14:33:35,432 [INFO] Patched input layer: 3 → 4 channels (extra initialized to 0)
+2026-04-28 14:33:35,432 [INFO] Feature channels: [112, 224, 448, 896]
+2026-04-28 14:33:35,844 [INFO] Skipping torch.compile (MSVC (cl.exe) not found. Install Visual Studio Build Tools for ~30% faster inference: https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+2026-04-28 14:33:35,844 [INFO] Models Loaded.
+2026-04-28 14:33:37,671 [INFO] Capture started at 1280x720
+2026-04-28 14:33:37,720 [INFO] Starting Main Loop...
+2026-04-28 14:33:37,720 [INFO] Press 'V' to toggle view mode (Grid vs Output).
+2026-04-28 14:33:37,720 [INFO] Press 'Q' to quit.
+2026-04-28 14:35:02,606 [ERROR] Programmet krasjet med en uventet feil:
+2026-04-28 14:35:02,608 [ERROR] Traceback (most recent call last):
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 528, in <module>
+    main()
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 386, in main
+    despill_val = cv2.getTrackbarPos("4. Remove Green", window_name) / 100.0
+cv2.error: OpenCV(4.13.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window_w32.cpp:2570: error: (-27:Null pointer) NULL window: 'CorridorKey Live Studio v1.2.0' in function 'cvGetTrackbarPos'
+
+
+2026-04-28 14:37:57,231 [INFO] Initialize CorridorKey Live Studio...
+2026-04-28 14:37:57,231 [INFO] Loading Models onto cuda in FP16...
+2026-04-28 14:37:57,452 [INFO] HTTP Request: GET https://huggingface.co/api/models/ZhengPeng7/BiRefNet_512x512/revision/main "HTTP/1.1 200 OK"
+2026-04-28 14:37:59,648 [INFO] Loading CorridorKey from CorridorKeyModule/checkpoints/CorridorKey.safetensors
+2026-04-28 14:37:59,648 [INFO] Initializing hiera_base_plus_224.mae_in1k_ft_in1k (img_size=1024)
+2026-04-28 14:38:00,269 [INFO] Skipped downloading base weights (relying on custom checkpoint)
+2026-04-28 14:38:00,269 [INFO] Patched input layer: 3 → 4 channels (extra initialized to 0)
+2026-04-28 14:38:00,269 [INFO] Feature channels: [112, 224, 448, 896]
+2026-04-28 14:38:00,964 [INFO] Skipping torch.compile (MSVC (cl.exe) not found. Install Visual Studio Build Tools for ~30% faster inference: https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+2026-04-28 14:38:00,965 [INFO] Models Loaded.
+2026-04-28 14:38:02,900 [INFO] Capture started at 1280x720
+2026-04-28 14:38:02,958 [INFO] Starting Main Loop...
+2026-04-28 14:38:02,958 [INFO] Press 'V' to toggle view mode (Grid vs Output).
+2026-04-28 14:38:02,958 [INFO] Press 'Q' to quit.
+2026-04-28 14:39:58,573 [ERROR] Programmet krasjet med en uventet feil:
+2026-04-28 14:39:58,574 [ERROR] Traceback (most recent call last):
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 528, in <module>
+    main()
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 386, in main
+    despill_val = cv2.getTrackbarPos("4. Remove Green", window_name) / 100.0
+cv2.error: OpenCV(4.13.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window_w32.cpp:2570: error: (-27:Null pointer) NULL window: 'CorridorKey Live Studio v1.2.0' in function 'cvGetTrackbarPos'
+
+
+2026-04-28 14:40:38,280 [INFO] Initialize CorridorKey Live Studio...
+2026-04-28 14:40:38,280 [INFO] Loading Models onto cuda in FP16...
+2026-04-28 14:40:38,525 [INFO] HTTP Request: GET https://huggingface.co/api/models/ZhengPeng7/BiRefNet/revision/main "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,670 [INFO] HTTP Request: HEAD https://huggingface.co/ZhengPeng7/BiRefNet/resolve/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/handler.py "HTTP/1.1 307 Temporary Redirect"
+2026-04-28 14:40:38,690 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/handler.py "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,703 [INFO] HTTP Request: HEAD https://huggingface.co/ZhengPeng7/BiRefNet/resolve/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/.gitattributes "HTTP/1.1 307 Temporary Redirect"
+2026-04-28 14:40:38,705 [INFO] HTTP Request: HEAD https://huggingface.co/ZhengPeng7/BiRefNet/resolve/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-04-28 14:40:38,707 [INFO] HTTP Request: HEAD https://huggingface.co/ZhengPeng7/BiRefNet/resolve/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/model.safetensors "HTTP/1.1 302 Found"
+2026-04-28 14:40:38,707 [WARNING] Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-28 14:40:38,711 [INFO] HTTP Request: HEAD https://huggingface.co/ZhengPeng7/BiRefNet/resolve/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-28 14:40:38,711 [INFO] HTTP Request: GET https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/handler.py "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,725 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/.gitattributes "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,728 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/README.md "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,730 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/config.json "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,748 [INFO] HTTP Request: GET https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/.gitattributes "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,752 [INFO] HTTP Request: GET https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/README.md "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,753 [INFO] HTTP Request: GET https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/config.json "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,791 [INFO] HTTP Request: HEAD https://huggingface.co/ZhengPeng7/BiRefNet/resolve/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/birefnet.py "HTTP/1.1 307 Temporary Redirect"
+2026-04-28 14:40:38,811 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/birefnet.py "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,833 [INFO] HTTP Request: GET https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/birefnet.py "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,838 [INFO] HTTP Request: HEAD https://huggingface.co/ZhengPeng7/BiRefNet/resolve/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/requirements.txt "HTTP/1.1 307 Temporary Redirect"
+2026-04-28 14:40:38,848 [INFO] HTTP Request: HEAD https://huggingface.co/ZhengPeng7/BiRefNet/resolve/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/.gitignore "HTTP/1.1 307 Temporary Redirect"
+2026-04-28 14:40:38,849 [INFO] HTTP Request: HEAD https://huggingface.co/ZhengPeng7/BiRefNet/resolve/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/BiRefNet_config.py "HTTP/1.1 307 Temporary Redirect"
+2026-04-28 14:40:38,858 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/requirements.txt "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,870 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/.gitignore "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,871 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/BiRefNet_config.py "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,878 [INFO] HTTP Request: GET https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/requirements.txt "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,899 [INFO] HTTP Request: GET https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/.gitignore "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,900 [INFO] HTTP Request: GET https://huggingface.co/api/resolve-cache/models/ZhengPeng7/BiRefNet/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4/BiRefNet_config.py "HTTP/1.1 200 OK"
+2026-04-28 14:40:38,997 [INFO] HTTP Request: GET https://huggingface.co/api/models/ZhengPeng7/BiRefNet/xet-read-token/e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4 "HTTP/1.1 200 OK"
+2026-04-28 14:41:02,785 [INFO] Loading CorridorKey from CorridorKeyModule/checkpoints/CorridorKey.safetensors
+2026-04-28 14:41:02,785 [INFO] Initializing hiera_base_plus_224.mae_in1k_ft_in1k (img_size=512)
+2026-04-28 14:41:03,318 [INFO] Skipped downloading base weights (relying on custom checkpoint)
+2026-04-28 14:41:03,319 [INFO] Patched input layer: 3 → 4 channels (extra initialized to 0)
+2026-04-28 14:41:03,319 [INFO] Feature channels: [112, 224, 448, 896]
+2026-04-28 14:41:03,831 [INFO] Skipping torch.compile (MSVC (cl.exe) not found. Install Visual Studio Build Tools for ~30% faster inference: https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+2026-04-28 14:41:03,831 [INFO] Models Loaded.
+2026-04-28 14:41:05,668 [INFO] Capture started at 1280x720
+2026-04-28 14:41:05,731 [INFO] Starting Main Loop...
+2026-04-28 14:41:05,731 [INFO] Press 'V' to toggle view mode (Grid vs Output).
+2026-04-28 14:41:05,731 [INFO] Press 'Q' to quit.
+2026-04-28 14:41:16,206 [ERROR] Programmet krasjet med en uventet feil:
+2026-04-28 14:41:16,209 [ERROR] Traceback (most recent call last):
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 528, in <module>
+    main()
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 486, in main
+    vis_mask = cv2.cvtColor(mask_np_255, cv2.COLOR_GRAY2BGR)
+NameError: name 'mask_np_255' is not defined
+
+2026-04-28 14:48:53,115 [INFO] Initialize CorridorKey Live Studio...
+2026-04-28 14:48:54,472 [WARNING] ============================================================
+2026-04-28 14:48:54,472 [WARNING] !!! KRAFTIG ADVARSEL: NVIDIA GPU FUNNET, MEN BRUKES IKKE !!!
+2026-04-28 14:48:54,472 [WARNING] Programmet kjører på CPU, noe som vil være ekstremt tregt.
+2026-04-28 14:48:54,472 [WARNING] Vennligst kjør Start_Live_Studio_Windows.bat for å reparere miljøet.
+2026-04-28 14:48:54,474 [WARNING] ============================================================
+2026-04-28 14:48:54,474 [INFO] Loading Models onto cpu in FP16...
+2026-04-28 14:48:54,886 [INFO] HTTP Request: GET https://huggingface.co/api/models/ZhengPeng7/BiRefNet_512x512/revision/main "HTTP/1.1 200 OK"
+2026-04-28 14:48:55,837 [INFO] Loading CorridorKey from CorridorKeyModule/checkpoints/CorridorKey.safetensors
+2026-04-28 14:48:55,839 [INFO] Initializing hiera_base_plus_224.mae_in1k_ft_in1k (img_size=1024)
+2026-04-28 14:48:56,471 [INFO] Skipped downloading base weights (relying on custom checkpoint)
+2026-04-28 14:48:56,474 [INFO] Patched input layer: 3 → 4 channels (extra initialized to 0)
+2026-04-28 14:48:56,474 [INFO] Feature channels: [112, 224, 448, 896]
+2026-04-28 14:48:57,366 [INFO] Skipping torch.compile (MSVC (cl.exe) not found. Install Visual Studio Build Tools for ~30% faster inference: https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+2026-04-28 14:48:57,366 [INFO] Models Loaded.
+2026-04-28 14:48:59,323 [INFO] Capture started at 1280x720
+2026-04-28 14:48:59,381 [INFO] Starting Main Loop...
+2026-04-28 14:48:59,382 [INFO] Press 'V' to toggle view mode (Grid vs Output).
+2026-04-28 14:48:59,382 [INFO] Press 'Q' to quit.
+2026-04-28 15:01:52,008 [INFO] Initialize CorridorKey Live Studio...
+2026-04-28 15:01:52,013 [INFO] Loading Models onto cuda in FP16...
+2026-04-28 15:01:52,284 [INFO] HTTP Request: GET https://huggingface.co/api/models/ZhengPeng7/BiRefNet_512x512/revision/main "HTTP/1.1 200 OK"
+2026-04-28 15:01:54,008 [INFO] Loading CorridorKey from CorridorKeyModule/checkpoints/CorridorKey.safetensors
+2026-04-28 15:01:54,009 [INFO] Initializing hiera_base_plus_224.mae_in1k_ft_in1k (img_size=512)
+2026-04-28 15:01:54,546 [INFO] Skipped downloading base weights (relying on custom checkpoint)
+2026-04-28 15:01:54,552 [INFO] Patched input layer: 3 → 4 channels (extra initialized to 0)
+2026-04-28 15:01:54,553 [INFO] Feature channels: [112, 224, 448, 896]
+2026-04-28 15:01:55,240 [INFO] Skipping torch.compile (MSVC (cl.exe) not found. Install Visual Studio Build Tools for ~30% faster inference: https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+2026-04-28 15:01:55,241 [INFO] Models Loaded.
+2026-04-28 15:01:57,224 [INFO] Capture started at 1280x720
+2026-04-28 15:01:57,288 [INFO] Starting Main Loop...
+2026-04-28 15:01:57,288 [INFO] Press 'V' to toggle view mode (Grid vs Output).
+2026-04-28 15:01:57,288 [INFO] Press 'Q' to quit.
+2026-04-28 15:12:17,507 [ERROR] Programmet krasjet med en uventet feil:
+2026-04-28 15:12:17,509 [ERROR] Traceback (most recent call last):
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 543, in <module>
+    main()
+  File "C:\Users\Anaru\Documents\GitHub\CorridorKey---Live\live_studio.py", line 386, in main
+    despill_val = cv2.getTrackbarPos("4. Remove Green", window_name) / 100.0
+cv2.error: OpenCV(4.13.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window_w32.cpp:2570: error: (-27:Null pointer) NULL window: 'CorridorKey Live Studio v1.2.0' in function 'cvGetTrackbarPos'
+
+

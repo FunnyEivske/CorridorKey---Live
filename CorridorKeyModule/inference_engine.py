@@ -435,16 +435,12 @@ class CorridorKeyEngine:
         bs, h, w = image.shape[:3]
 
         # 1. Inputs Check & Normalization
-        image = TF.to_dtype(
-            torch.from_numpy(image).permute((0, 3, 1, 2)),
-            self.model_precision,
-            scale=True,
-        ).to(self.device, non_blocking=True)
-        mask_linear = TF.to_dtype(
-            torch.from_numpy(mask_linear.reshape((bs, h, w, 1))).permute((0, 3, 1, 2)),
-            self.model_precision,
-            scale=True,
-        ).to(self.device, non_blocking=True)
+        # MOVE TO GPU FIRST BEFORE SCALING AND CONVERTING TO DTYPE (Massive speedup!)
+        image_t = torch.from_numpy(image).to(self.device, non_blocking=True).permute((0, 3, 1, 2))
+        image = TF.to_dtype(image_t, self.model_precision, scale=True)
+        
+        mask_t = torch.from_numpy(mask_linear.reshape((bs, h, w, 1))).to(self.device, non_blocking=True).permute((0, 3, 1, 2))
+        mask_linear = TF.to_dtype(mask_t, self.model_precision, scale=True)
 
         inp_t = self._preprocess_input(image, mask_linear, input_is_linear)
 

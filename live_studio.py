@@ -2,6 +2,9 @@ import time
 import cv2
 import numpy as np
 import torch
+import argparse
+import json
+import os
 from PIL import Image
 from torchvision import transforms
 try:
@@ -16,6 +19,7 @@ import gc
 import sys
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 import logging
 import traceback
 
@@ -32,6 +36,19 @@ logging.basicConfig(
 # CorridorKey and BiRefNet imports
 from CorridorKeyModule.inference_engine import CorridorKeyEngine
 from BiRefNetModule.wrapper import BiRefNetHandler, ImagePreprocessor
+
+def get_windows_cameras():
+    """Tries to get a list of active camera names using PowerShell."""
+    try:
+        # Use PowerShell to get device names
+        cmd = ["powershell", "-Command", "Get-PnpDevice -Class Camera -Status OK | Select-Object -ExpandProperty FriendlyName"]
+        output = subprocess.check_output(cmd, encoding='utf-8', startupinfo=subprocess.STARTUPINFO(dwFlags=subprocess.STARTF_USESHOWWINDOW)).strip()
+        if output:
+            names = output.split('\n')
+            return [n.strip() for n in names if n.strip()]
+    except Exception:
+        pass
+    return []
 
 class MessageLog:
     def __init__(self, max_messages=8):
@@ -88,8 +105,8 @@ class StudioLauncher:
     """A simple pre-launch GUI for setting up the Studio without touching the code."""
     def __init__(self):
         self.root = tk.Tk()
-        self.root.title("CorridorKey Live Setup")
-        self.root.geometry("400x450")
+        self.root.title("CorridorKey Live Studio Setup v1.2.0")
+        self.root.geometry("450x650")
         
         # Center the window
         self.root.eval('tk::PlaceWindow . center')
@@ -100,9 +117,17 @@ class StudioLauncher:
         ttk.Label(self.root, text="CorridorKey Live Studio", font=("Arial", 16, "bold")).pack(pady=15)
         
         # UI Elements
-        ttk.Label(self.root, text="Camera ID (0 for default):").pack(pady=(5, 0))
-        self.camera_id = ttk.Entry(self.root, justify="center")
-        self.camera_id.insert(0, "0")
+        ttk.Label(self.root, text="Select Camera:").pack(pady=(5, 0))
+        
+        # Get list of cameras, fall back to indices if names can't be fetched
+        camera_list = get_windows_cameras()
+        cam_values = []
+        for i in range(10): # Offer up to 10 cameras
+            name = camera_list[i] if i < len(camera_list) else f"Camera {i}"
+            cam_values.append(f"{i}: {name}")
+            
+        self.camera_id = ttk.Combobox(self.root, values=cam_values, state="readonly", justify="center", width=30)
+        self.camera_id.set(cam_values[0])
         self.camera_id.pack()
         
         ttk.Label(self.root, text="Camera Resolution:").pack(pady=(15, 0))
@@ -142,42 +167,50 @@ class StudioLauncher:
         # Start button
         style = ttk.Style()
         style.configure("Accent.TButton", font=("Arial", 12, "bold"))
-        ttk.Button(self.root, text="Start Studio", command=self.start_app, style="Accent.TButton").pack(pady=10)
+        button_frame = ttk.Frame(self.root)
+        button_frame.pack(pady=20)
         
-    def start_app(self):
+        start_btn = ttk.Button(button_frame, text="Start Studio", command=self.start_app, width=15)
+        start_btn.grid(row=0, column=0, padx=5)
+        
+        save_btn = ttk.Button(button_frame, text="Save Autostart", command=self.save_autostart, width=15)
+        save_btn.grid(row=0, column=1, padx=5)
+        
+    def _update_cuda_status(self):
+        try:
+            pass
+        except Exception:
+            pass
+
+    def get_current_settings(self):
         w, h = map(int, self.cam_res.get().split('x'))
-        cam_id_val = self.camera_id.get()
+        cam_id_str = self.camera_id.get()
+        # Extract the integer ID from "0: Name"
+        cam_id_val = int(cam_id_str.split(':')[0])
         
-        self.settings = {
-            "CAMERA_ID": int(cam_id_val) if cam_id_val.isdigit() else cam_id_val,
+        return {
+            "CAMERA_ID": cam_id_val,
             "CAMERA_WIDTH": w,
             "CAMERA_HEIGHT": h,
-            "CAMERA_FPS": 30,
+            "CAMERA_FPS": 60,
             "BIREFNET_MODEL": self.biref_model.get(),
             "CORRIDORKEY_RES": int(self.ck_res.get()),
             "NDI_ENABLED": self.ndi_var.get(),
             "COMPUTE_DEVICE": self.device_var.get()
         }
+
+    def save_autostart(self):
+        cfg = self.get_current_settings()
+        try:
+            with open("autostart_config.json", "w") as f:
+                json.dump(cfg, f, indent=4)
+            messagebox.showinfo("Saved", "Autostart settings saved to autostart_config.json")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to save settings: {e}")
+
+    def start_app(self):
+        self.settings = self.get_current_settings()
         self.root.destroy()
-
-
-def get_gpu_temperature_and_load():
-    """Simple check of GPU temp and load using nvidia-smi."""
-    try:
-        # Get temperature and util.gpu for all GPUs
-        output = subprocess.check_output(
-            ["nvidia-smi", "--query-gpu=temperature.gpu,utilization.gpu", "--format=csv,noheader,nounits"],
-            encoding='utf-8'
-        ).strip()
-        if not output:
-            return 0, 0
-        
-        # Take the first line (primary GPU)
-        first_gpu = output.split('\n')[0]
-        temp, load = first_gpu.split(',')
-        return int(temp), int(load)
-    except Exception:
-        return 0, 0
 
 def create_ndi_sender(name="CorridorKey Live"):
     """Create NDI Video Sender."""
@@ -214,15 +247,30 @@ def send_ndi_frame(ndi_send, rgba_frame):
     ndi.send_send_video_v2(ndi_send, video_frame)
 
 def main():
-    # 1. Launch GUI to get settings
-    launcher = StudioLauncher()
-    launcher.root.mainloop()
+    parser = argparse.ArgumentParser(description="CorridorKey Live Studio")
+    parser.add_argument("--autostart", action="store_true", help="Bypass GUI and use saved settings")
+    args = parser.parse_args()
     
-    if not launcher.settings:
-        logging.info("Setup cancelled. Exiting.")
-        return
+    cfg = None
+    if args.autostart:
+        try:
+            with open("autostart_config.json", "r") as f:
+                cfg = json.load(f)
+            logging.info("Autostart activated. Loaded config from autostart_config.json")
+        except Exception as e:
+            logging.error(f"Failed to load autostart config: {e}")
+            logging.info("Falling back to GUI.")
+            
+    if not cfg:
+        # 1. Launch GUI to get settings
+        launcher = StudioLauncher()
+        launcher.root.mainloop()
         
-    cfg = launcher.settings
+        if not launcher.settings:
+            logging.info("Setup cancelled. Exiting.")
+            return
+            
+        cfg = launcher.settings
 
     logging.info("Initialize CorridorKey Live Studio...")
     
@@ -283,8 +331,10 @@ def main():
     # NDI Integration
     ndi_sender = create_ndi_sender("CorridorKey Live") if cfg["NDI_ENABLED"] else None
     
-    # Camera Capture
-    cap = cv2.VideoCapture(cfg["CAMERA_ID"])
+    # Camera Capture - Use DSHOW on Windows for best performance
+    cap = cv2.VideoCapture(cfg["CAMERA_ID"], cv2.CAP_DSHOW) if sys.platform.startswith('win') else cv2.VideoCapture(cfg["CAMERA_ID"])
+    # Force MJPG codec which supports 60fps at high resolutions on most webcams
+    cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, cfg["CAMERA_WIDTH"])
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cfg["CAMERA_HEIGHT"])
     cap.set(cv2.CAP_PROP_FPS, cfg["CAMERA_FPS"])
@@ -294,86 +344,89 @@ def main():
     logging.info(f"Capture started at {cap_width}x{cap_height}")
     
     # 3. Setup OpenCV Window and Live Controls
-    cv2.namedWindow("CorridorKey Live Studio", cv2.WINDOW_NORMAL)
+    window_name = "CorridorKey Live Studio v1.2.0"
+    cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     
     def noop(x): pass
-    cv2.createTrackbar("Despill (0-100)", "CorridorKey Live Studio", 100, 100, noop)
-    cv2.createTrackbar("Despeckle", "CorridorKey Live Studio", 400, 1000, noop)
-    cv2.createTrackbar("Erode/Dilate", "CorridorKey Live Studio", 10, 20, noop) # 10 = neutral
-    cv2.createTrackbar("Refiner Strength", "CorridorKey Live Studio", 100, 200, noop) # 100 = 1.0
-    cv2.createTrackbar("View: Grid(1)/Res(0)", "CorridorKey Live Studio", 1, 1, noop)
-    cv2.createTrackbar("Scale %", "CorridorKey Live Studio", 50, 100, noop)
+    cv2.createTrackbar("1. Clean Edge", window_name, 10, 20, noop) # Erode/Dilate
+    cv2.createTrackbar("2. Remove Dots", window_name, 400, 1000, noop) # Despeckle
+    cv2.createTrackbar("3. Soften Hair", window_name, 100, 200, noop) # Refiner
+    cv2.createTrackbar("4. Remove Green", window_name, 100, 100, noop) # Despill
+    cv2.createTrackbar("Window Scale %", window_name, 50, 100, noop)
     
     frame_count = 0
-    last_vram_clear = time.time()
+    view_mode = 0 # 0=Result, 1=Grid
     
-    logging.info("Starting Main Loop... Press 'q' to quit.")
+    # FPS tracking
+    fps_history = []
+    
+    # Pre-allocate ImageNet normalization tensors on GPU
+    imgnet_mean = torch.tensor([0.485, 0.456, 0.406], device=device).view(3, 1, 1)
+    imgnet_std = torch.tensor([0.229, 0.224, 0.225], device=device).view(3, 1, 1)
+    
+    import torch.nn.functional as F
+    
+    logging.info("Starting Main Loop...")
+    logging.info("Press 'V' to toggle view mode (Grid vs Output).")
+    logging.info("Press 'Q' to quit.")
     
     while cap.isOpened():
-        start_time = time.time()
+        loop_start_time = time.time()
         
-        # GPU Monitoring & Skipping logic (only if critical temp)
-        temp, load = get_gpu_temperature_and_load()
-        if temp > 85:
-            logging.warning(f"CRITICAL: GPU too hot ({temp}C)! Skipping frame.")
-            # Clear buffer slightly
-            cap.read() 
-            time.sleep(0.1)
-            continue
-            
-        # Optional: Warn if load is pinned but don't skip unless user wants to
-        if load > 99:
-             # Just a small delay to prevent complete system hang on some laptops
-             time.sleep(0.005)
-            
+        # Measure camera time
+        cam_start = time.time()
         ret, frame = cap.read()
+        cam_time = (time.time() - cam_start) * 1000
+        
         if not ret:
             logging.error("Failed to grab frame.")
             break
             
-        # Get live slider values
-        despill_val = cv2.getTrackbarPos("Despill (0-100)", "CorridorKey Live Studio") / 100.0
-        despeckle_val = cv2.getTrackbarPos("Despeckle", "CorridorKey Live Studio")
-        erode_val = cv2.getTrackbarPos("Erode/Dilate", "CorridorKey Live Studio") - 10
-        refine_scale = cv2.getTrackbarPos("Refiner Strength", "CorridorKey Live Studio") / 100.0
-            
-        # Ensure BGR to RGB for processing
+        # Read GUI Controls
+        despill_val = cv2.getTrackbarPos("4. Remove Green", window_name) / 100.0
+        despeckle_val = cv2.getTrackbarPos("2. Remove Dots", window_name)
+        erode_val = cv2.getTrackbarPos("1. Clean Edge", window_name) - 10
+        refine_scale = cv2.getTrackbarPos("3. Soften Hair", window_name) / 100.0
+        
+        # 1. Image Preprocessing
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         
-        # Alpha Hint Layer (BiRefNet)
-        pil_image = Image.fromarray(frame_rgb)
-        
-        # We need to account for dynamic models if resolution is none
+        # Fast GPU Preprocessing for BiRefNet
         res = birefnet_handler.resolution
         if res is None:
-            res = [int(int(r) // 32 * 32) for r in pil_image.size]
-            birefnet_preprocessor = ImagePreprocessor(resolution=tuple(res))
+            res = (int(frame_rgb.shape[1] // 32 * 32), int(frame_rgb.shape[0] // 32 * 32))
             
-        image_proc = birefnet_preprocessor.proc(pil_image).unsqueeze(0).to(device)
+        frame_resized = cv2.resize(frame_rgb, tuple(res), interpolation=cv2.INTER_LINEAR)
+        
+        # Convert to tensor and move to GPU
+        image_proc = torch.from_numpy(frame_resized).to(device, non_blocking=True).permute(2, 0, 1).float()
+        
+        # Normalize (ImageNet stats)
+        image_proc.div_(255.0).sub_(imgnet_mean).div_(imgnet_std).unsqueeze_(0)
+            
         if half_precision:
             image_proc = image_proc.half()
             
+        t1 = time.time()
         with torch.no_grad():
-            preds = birefnet_model(image_proc)[-1].sigmoid().cpu()
+            preds = birefnet_model(image_proc)[-1].sigmoid() # Keep on GPU
             
-        pred = preds[0].squeeze()
-        pred_pil = transforms.ToPILImage()(pred.float())
+        # Fast GPU Postprocessing
+        target_h, target_w = frame_rgb.shape[:2]
+        preds_resized = F.interpolate(preds, size=(target_h, target_w), mode='bilinear', align_corners=False)
         
-        # Resize alpha to original frame size
-        mask = pred_pil.resize((frame_rgb.shape[1], frame_rgb.shape[0]))
-        mask_np_255 = np.array(mask)
-        
-        # Apply Erode/Dilate to the hint mask
+        # Apply Erode/Dilate directly on the GPU tensor! (This fixes the massive OpenCV float32 bug)
         if erode_val != 0:
             k_size = abs(erode_val) * 2 + 1
-            kernel = np.ones((k_size, k_size), np.uint8)
-            if erode_val < 0:
-                mask_np_255 = cv2.erode(mask_np_255, kernel, iterations=1)
-            else:
-                mask_np_255 = cv2.dilate(mask_np_255, kernel, iterations=1)
-        
-        # Refinement Layer expects linear mask 0.0 - 1.0
-        mask_linear = mask_np_255.astype(np.float32) / 255.0
+            padding = k_size // 2
+            if erode_val < 0: # Erode = MinPool
+                preds_resized = -F.max_pool2d(-preds_resized, kernel_size=k_size, stride=1, padding=padding)
+            else: # Dilate = MaxPool
+                preds_resized = F.max_pool2d(preds_resized, kernel_size=k_size, stride=1, padding=padding)
+                
+        # Move to CPU as 0.0-1.0 float32 numpy array
+        mask_linear = preds_resized[0, 0].float().cpu().numpy()
+        t2 = time.time()
         
         # Refinement Layer (CorridorKey)
         ck_out = ck_engine.process_frame(
@@ -386,6 +439,7 @@ def main():
             despill_strength=despill_val,
             post_process_on_gpu=True
         )
+        t3 = time.time()
         
         # The result includes: alpha, fg, comp, processed (RGBA)
         res_comp_srgb = ck_out['comp'] # 0.0 - 1.0 composite on checkboard
@@ -399,40 +453,48 @@ def main():
             
             # 2. Convert RGB from Linear to sRGB (so it's not dark)
             # Simple 2.2 gamma approximation for speed, or use a proper curve
-            rgb_srgb = np.power(np.maximum(rgb_lin, 0), 1.0/2.2)
+            rgb_srgb = cv2.pow(cv2.max(rgb_lin, 0.0), 1.0/2.2)
             
             # 3. Recombine and convert to uint8
             rgba_srgb = np.concatenate([rgb_srgb, alpha], axis=-1)
-            rgba_out = (rgba_srgb * 255.0).clip(0, 255).astype(np.uint8)
+            rgba_out = cv2.convertScaleAbs(rgba_srgb, alpha=255.0)
             
             # 4. Send to NDI (ensure memory is contiguous)
             send_ndi_frame(ndi_sender, np.ascontiguousarray(rgba_out))
             
+        t4 = time.time()
+        
         # Latency Meter
-        latency_ms = (time.time() - start_time) * 1000
+        latency_ms = (t4 - loop_start_time) * 1000
+        prep_ms = (t1 - loop_start_time) * 1000
+        biref_ms = (t2 - t1) * 1000
+        ck_ms = (t3 - t2) * 1000
+        post_ms = (t4 - t3) * 1000
         
         # VRAM Management
         frame_count += 1
-        if time.time() - last_vram_clear > 10.0: # Clear cache every 10 seconds
-            if torch.cuda.is_available():
-                torch.cuda.empty_cache()
-            elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
-                torch.mps.empty_cache()
-            gc.collect()
-            last_vram_clear = time.time()
+        
+        # FPS Calculation
+        loop_time = time.time() - loop_start_time
+        fps = 1.0 / loop_time if loop_time > 0 else 0
+        fps_history.append(fps)
+        if len(fps_history) > 30:
+            fps_history.pop(0)
+        avg_fps = sum(fps_history) / len(fps_history)
             
         # Visualization Modes
-        view_mode = cv2.getTrackbarPos("View: Grid(1)/Res(0)", "CorridorKey Live Studio")
-        scale_val = cv2.getTrackbarPos("Scale %", "CorridorKey Live Studio") / 100.0
+        scale_val = cv2.getTrackbarPos("Window Scale %", window_name) / 100.0
         if scale_val < 0.1: scale_val = 0.1 # Minimum scale
 
-        vis_res = (res_comp_srgb * 255.0).clip(0, 255).astype(np.uint8)
+        vis_res = cv2.convertScaleAbs(res_comp_srgb, alpha=255.0)
         vis_res = cv2.cvtColor(vis_res, cv2.COLOR_RGB2BGR)
         
         if view_mode == 1:
             # Side by side (Grid)
             vis_orig = frame
-            vis_mask = cv2.cvtColor(mask_np_255, cv2.COLOR_GRAY2BGR)
+            # mask_linear is 0.0 - 1.0, convert back to 0-255 uint8 for display
+            vis_mask_8u = cv2.convertScaleAbs(mask_linear, alpha=255.0)
+            vis_mask = cv2.cvtColor(vis_mask_8u, cv2.COLOR_GRAY2BGR)
             
             # Add labels
             cv2.putText(vis_orig, f"Original ({cap_width}x{cap_height})", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
@@ -445,9 +507,13 @@ def main():
             cv2.putText(vis_res, "Live Output", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
             grid = vis_res
 
-        # Add Latency and Load info to the top right
-        info_text = f"{latency_ms:.1f}ms | GPU: {load}% {temp}C"
-        cv2.putText(grid, info_text, (grid.shape[1] - 300, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 1, cv2.LINE_AA)
+        # Determine actual device strings for debugging
+        biref_dev = str(birefnet_model.device).upper()
+        ck_dev = str(ck_engine.device).upper()
+
+        # Add Latency, FPS, and Camera Info to the top right
+        info_text = f"FPS:{avg_fps:.0f} | Lat:{latency_ms:.0f}ms (P:{prep_ms:.0f}|B:{biref_ms:.0f}|C:{ck_ms:.0f}|N:{post_ms:.0f}) | {ck_dev}"
+        cv2.putText(grid, info_text, (grid.shape[1] - 580, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
 
         # Draw Message Log Overlay
         grid = message_log.draw(grid)
@@ -457,10 +523,13 @@ def main():
             h, w = grid.shape[:2]
             grid = cv2.resize(grid, (int(w * scale_val), int(h * scale_val)))
             
-        cv2.imshow("CorridorKey Live Studio", grid)
+        cv2.imshow(window_name, grid)
         
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord('q'):
             break
+        elif key == ord('v'):
+            view_mode = 1 - view_mode # Toggle 0 and 1
 
     # Cleanup
     cap.release()
